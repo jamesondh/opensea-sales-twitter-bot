@@ -10,11 +10,13 @@ function formatAndSendTweet(event) {
     const openseaLink = _.get(event, ['asset', 'permalink']);
     const totalPrice = _.get(event, 'total_price');
     const usdValue = _.get(event, ['payment_token', 'usd_price']);
+    const tokenSymbol = _.get(event, ['payment_token', 'symbol']);
+    
+    const formattedTokenPrice = ethers.utils.formatEther(totalPrice.toString());
+    const formattedUsdPrice = (formattedTokenPrice * usdValue).toFixed(2);
+    const formattedPriceSymbol = (tokenSymbol === 'WETH' ? 'Ξ' : ` ${tokenSymbol}`);
 
-    const formattedEthPrice = ethers.utils.formatEther(totalPrice.toString());
-    const formattedUsdPrice = (formattedEthPrice * usdValue).toFixed(2);
-
-    const tweetText = `${tokenName} bought for ${formattedEthPrice}Ξ ($${formattedUsdPrice}) #FRWC #NFTs ${openseaLink}`;
+    const tweetText = `${tokenName} bought for ${formattedTokenPrice}${formattedPriceSymbol} ($${formattedUsdPrice}) #FRWC #NFTs ${openseaLink}`;
 
     console.log(tweetText);
 
