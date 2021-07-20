@@ -14,7 +14,10 @@ function formatAndSendTweet(event) {
     
     const formattedTokenPrice = ethers.utils.formatEther(totalPrice.toString());
     const formattedUsdPrice = (formattedTokenPrice * usdValue).toFixed(2);
-    const formattedPriceSymbol = (tokenSymbol === 'WETH' ? 'Ξ' : ` ${tokenSymbol}`);
+    const formattedPriceSymbol = (
+        (tokenSymbol === 'WETH' || tokenSymbol === 'ETH') 
+            ? 'Ξ' 
+            : ` ${tokenSymbol}`);
 
     const tweetText = `${tokenName} bought for ${formattedTokenPrice}${formattedPriceSymbol} ($${formattedUsdPrice}) #FRWC #NFTs ${openseaLink}`;
 
