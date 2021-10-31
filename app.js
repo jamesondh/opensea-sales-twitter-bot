@@ -29,7 +29,7 @@ function formatAndSendTweet(event) {
 // Poll OpenSea every minute & retrieve all sales for a given collection in the last minute
 // Then pass those events over to the formatter before tweeting
 setInterval(() => {
-    const lastMinute = moment().startOf('minute').subtract(59, "seconds").unix();
+    const lastMinute = moment().startOf('minute').subtract(1, "minutes").subtract(59, "seconds").unix();
 
     axios.get('https://api.opensea.io/api/v1/events', {
         params: {
@@ -41,7 +41,7 @@ setInterval(() => {
     }).then((response) => {
         const events = _.get(response, ['data', 'asset_events']);
 
-        console.log(`${events.length} sales in the last minute...`);
+        console.log(`${events.length} sales in the last two minutes for ${process.env.OPENSEA_COLLECTION_SLUG}...`);
 
         _.each(events, (event) => {
             return formatAndSendTweet(event);
@@ -49,4 +49,25 @@ setInterval(() => {
     }).catch((error) => {
         console.error(error);
     });
-}, 60000);
+
+    axios.get('https://api.opensea.io/api/v1/events', {
+        params: {
+            collection_slug: "forgottensouls",
+            event_type: 'successful',
+            occurred_after: lastMinute,
+            only_opensea: 'false'
+        }
+    }).then((response) => {
+        const events = _.get(response, ['data', 'asset_events']);
+
+        console.log(`${events.length} sales in the last two minutes for forgottensouls...`);
+
+        _.each(events, (event) => {
+            return formatAndSendTweet(event);
+        });
+    }).catch((error) => {
+        console.error(error);
+    });
+
+
+}, 120000);
