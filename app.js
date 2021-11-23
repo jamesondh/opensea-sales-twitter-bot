@@ -32,6 +32,9 @@ setInterval(() => {
     const lastMinute = moment().startOf('minute').subtract(1, "minutes").subtract(59, "seconds").unix();
 
     axios.get('https://api.opensea.io/api/v1/events', {
+        headers: {
+            "X-API-KEY": process.env.OPENSEA_API_KEY
+        },
         params: {
             collection_slug: process.env.OPENSEA_COLLECTION_SLUG,
             event_type: 'successful',
