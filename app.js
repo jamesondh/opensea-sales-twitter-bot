@@ -53,24 +53,25 @@ setInterval(() => {
         console.error(error);
     });
 
-    axios.get('https://api.opensea.io/api/v1/events', {
-        params: {
-            collection_slug: "forgottensouls",
-            event_type: 'successful',
-            occurred_after: lastMinute,
-            only_opensea: 'false'
-        }
-    }).then((response) => {
-        const events = _.get(response, ['data', 'asset_events']);
+    // disabled for now - i think we need another API key for this collection
+//     axios.get('https://api.opensea.io/api/v1/events', {
+//         params: {
+//             collection_slug: "forgottensouls",
+//             event_type: 'successful',
+//             occurred_after: lastMinute,
+//             only_opensea: 'false'
+//         }
+//     }).then((response) => {
+//         const events = _.get(response, ['data', 'asset_events']);
 
-        console.log(`${events.length} sales in the last two minutes for forgottensouls...`);
+//         console.log(`${events.length} sales in the last two minutes for forgottensouls...`);
 
-        _.each(events, (event) => {
-            return formatAndSendTweet(event);
-        });
-    }).catch((error) => {
-        console.error(error);
-    });
+//         _.each(events, (event) => {
+//             return formatAndSendTweet(event);
+//         });
+//     }).catch((error) => {
+//         console.error(error);
+//     });
 
 
 }, 120000);
